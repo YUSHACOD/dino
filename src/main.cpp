@@ -1,6 +1,10 @@
 #include <raylib-cpp.hpp>
+#include <iostream>
+#include <filesystem>
 
-int main(int argc, char* argv) {
+#include "drawable.hpp"
+
+int main() {
     // Initialization
     //--------------------------------------------------------------------------------------
     int screenWidth = 1920;
@@ -9,6 +13,13 @@ int main(int argc, char* argv) {
     raylib::Color textColor(BLACK);
     raylib::Window w(screenWidth, screenHeight, "Dino");
     w.ToggleFullscreen();
+    
+    // Test Ground
+    //--------------------------------------------------------------------------------------
+    Drawable test("resources/images/dinos/dino_idle.png", "");
+    raylib::Vector2 pos(190, 200);
+    //--------------------------------------------------------------------------------------
+    
 
     // Frame Rate
     //--------------------------------------------------------------------------------------
@@ -28,6 +39,8 @@ int main(int argc, char* argv) {
         ClearBackground(WHITE);
         textColor.DrawText("THE DINO WILL RISE!", 190, 200,
                            20);
+        test.draw(pos);
+
         EndDrawing();
         //--------------------------------------------------------------------------------------
     }
@@ -36,5 +49,8 @@ int main(int argc, char* argv) {
     // End
     //--------------------------------------------------------------------------------------
     w.Close();
+
+    std::filesystem::path current = std::filesystem::current_path();
+    std::cout << "Current path: " << current << '\n';
     return 0;
 }

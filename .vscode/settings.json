@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "*.m": "cpp",
+        "algorithm": "cpp",
+        "atomic": "cpp",
+        "memory": "cpp",
+        "new": "cpp",
+        "numeric": "cpp",
+        "system_error": "cpp",
+        "thread": "cpp"
+    }
+}
