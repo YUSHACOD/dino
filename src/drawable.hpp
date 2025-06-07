@@ -34,7 +34,6 @@ Drawable::Drawable(std::string texture_path, std::string shader_path)
     : shader("", shader_path) {
     this->texture.Load(texture_path);
     this->color = WHITE;
-	std::cout << "Drawable generated.\n";
 }
 
 Drawable::~Drawable() {

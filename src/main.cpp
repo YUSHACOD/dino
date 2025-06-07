@@ -1,8 +1,7 @@
 #include <raylib-cpp.hpp>
 #include <iostream>
-#include <filesystem>
 
-#include "drawable.hpp"
+#include "game_entities/cloud.hpp"
 
 int main() {
     // Initialization
@@ -16,8 +15,7 @@ int main() {
     
     // Test Ground
     //--------------------------------------------------------------------------------------
-    Drawable test("resources/images/dinos/dino_idle.png", "");
-    raylib::Vector2 pos(190, 200);
+    Cloud cloud;
     //--------------------------------------------------------------------------------------
     
 
@@ -39,8 +37,7 @@ int main() {
         ClearBackground(WHITE);
         textColor.DrawText("THE DINO WILL RISE!", 190, 200,
                            20);
-        test.draw(pos);
-
+        cloud.draw();
         EndDrawing();
         //--------------------------------------------------------------------------------------
     }
@@ -49,8 +46,5 @@ int main() {
     // End
     //--------------------------------------------------------------------------------------
     w.Close();
-
-    std::filesystem::path current = std::filesystem::current_path();
-    std::cout << "Current path: " << current << '\n';
     return 0;
 }
