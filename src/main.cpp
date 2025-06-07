@@ -1,7 +1,7 @@
-#include <raylib-cpp.hpp>
 #include <iostream>
+#include <raylib-cpp.hpp>
 
-#include "game_entities/cloud.hpp"
+#include "game_entities/nums.hpp"
 
 int main() {
     // Initialization
@@ -12,12 +12,11 @@ int main() {
     raylib::Color textColor(BLACK);
     raylib::Window w(screenWidth, screenHeight, "Dino");
     w.ToggleFullscreen();
-    
+
     // Test Ground
     //--------------------------------------------------------------------------------------
-    Cloud cloud;
+    Nums nums_asset;
     //--------------------------------------------------------------------------------------
-    
 
     // Frame Rate
     //--------------------------------------------------------------------------------------
@@ -35,9 +34,8 @@ int main() {
         BeginDrawing();
 
         ClearBackground(WHITE);
-        textColor.DrawText("THE DINO WILL RISE!", 190, 200,
-                           20);
-        cloud.draw();
+        textColor.DrawText("THE DINO WILL RISE!", 190, 200, 20);
+        nums_asset.drawScore(123456789, raylib::Vector2(190, 300));
         EndDrawing();
         //--------------------------------------------------------------------------------------
     }

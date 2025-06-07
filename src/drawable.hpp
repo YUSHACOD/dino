@@ -14,7 +14,8 @@ class Drawable {
     raylib::Shader shader;
 
     Drawable(std::string texture_path, std::string shader_path);
-
+    
+    Drawable(const Drawable&) = delete;
     ~Drawable();
 
     Vector2 get_dimensions() {

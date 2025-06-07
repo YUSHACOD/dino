@@ -8,6 +8,7 @@
         "numeric": "cpp",
         "system_error": "cpp",
         "thread": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "format": "cpp"
     }
 }
