@@ -80,6 +80,10 @@ class Bird : public Obstacle {
     }
 
     void incrementState() { this->state = (this->state + 1) % BirdStateCount; }
+    
+    ObstacleType getType() {
+        return ObstacleType::Bird;
+    }
 
     void update(float scrollSpeed, float elapsedTime) {
         this->state_change_time += elapsedTime;

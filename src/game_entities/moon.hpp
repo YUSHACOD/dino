@@ -40,7 +40,7 @@ class Moon {
         }
     }
 
-    void drawSelf() { this->drawables[this->state]->draw(MoonPos); }
+    void draw() { this->drawables[this->state]->draw(MoonPos); }
 
     void draw(raylib::Vector2 pos) { this->drawables[this->state]->draw(pos); }
 };

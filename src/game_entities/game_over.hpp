@@ -19,14 +19,14 @@ class GameOver {
 
     GameOver();
     ~GameOver();
-    
+
     void draw() {
-        this->drawable.draw(GameOverTitlePos);
+        const raylib::Vector2 adjustedPos =
+            adjustPosMiddle(GameOverTitlePos, this->width, this->height);
+        this->drawable.draw(adjustedPos);
     }
-    
-    void draw(raylib::Vector2 pos) {
-        this->drawable.draw(pos);
-    }
+
+    void draw(raylib::Vector2 pos) { this->drawable.draw(pos); }
 };
 
 GameOver::GameOver() : drawable(GameOverResourcePath, "") {

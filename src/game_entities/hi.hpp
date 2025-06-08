@@ -21,7 +21,11 @@ class HiScoreTitle {
 
     void draw(raylib::Vector2 pos) { this->drawable.draw(pos); }
 
-    void draw() { this->drawable.draw(HiScoreTitlePos); }
+    void draw() {
+        const raylib::Vector2 adjustedPos =
+            adjustPosMiddle(HiScoreTitlePos, this->width, this->height);
+        this->drawable.draw(adjustedPos);
+    }
 };
 
 HiScoreTitle::HiScoreTitle() : drawable(HiResourcePath, "") {

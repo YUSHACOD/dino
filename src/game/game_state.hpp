@@ -16,6 +16,8 @@
 #include "../game_entities/small_trees.hpp"
 #include "../game_entities/stars.hpp"
 
+const float ObstacleDefaultHeight = 620;
+
 const raylib::Vector2 HiScorePos(1350, 37);
 const raylib::Vector2 CurrScorePos(1640, 37);
 
@@ -35,7 +37,7 @@ std::unique_ptr<Obstacle> getRandomObstacle(float width, float height) {
         case ObstacleType::SmallTree:
             idx = SmallTree::getRandomState();
             return std::make_unique<SmallTree>(width, height, idx);
-        
+
         default:
             idx = Bird::getRandomState();
             return std::make_unique<Bird>(width, idx);
@@ -91,8 +93,46 @@ class GameState {
     // Draw
     // ------------------------------------------------------------
     void draw() {
+        this->drawScenery();
+
+        this->dino.draw();
+
+        this->ground.draw();
+        this->drawObstacle();
+
+        if (this->gameEnded) {
+            this->gameOverTitle.draw();
+        }
+
+        this->hiTitle.draw();
+        this->nums.drawScore(this->hiScore, HiScorePos);
+        this->nums.drawScore(this->currentScore, CurrScorePos);
+    }
+
+    void drawScenery() {
         this->cloud.draw();
         this->stars.draw();
+        this->moon.draw();
+    }
+
+    void drawObstacle() {
+        switch (this->obstacle->getType()) {
+            case ObstacleType::Bird:
+                this->obstacle->draw(this->birdAsset);
+                break;
+
+            case ObstacleType::BigTree:
+                this->obstacle->draw(this->bigTreeAsset);
+                break;
+
+            case ObstacleType::SmallTree:
+                this->obstacle->draw(this->smallTreeAsset);
+                break;
+
+            default:
+                this->obstacle->draw(this->birdAsset);
+                break;
+        }
     }
     // ------------------------------------------------------------
 };
@@ -107,7 +147,8 @@ GameState::GameState(bool reverse, raylib::Vector2 screenDimensions)
     this->reverse = reverse;
     this->updateCount = 0;
 
-    this->obstacle = getRandomObstacle((float)screenDimensions.x, GroundPos);
+    this->obstacle =
+        getRandomObstacle((float)screenDimensions.x, ObstacleDefaultHeight);
 }
 
 GameState::~GameState() {}

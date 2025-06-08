@@ -58,6 +58,10 @@ class SmallTree: public Obstacle {
     static int getRandomState() {
         return GetRandomValue(0, SmallTreeCount - 1);
     }
+    
+    ObstacleType getType() {
+        return ObstacleType::SmallTree;
+    }
 
     void update(float scrollSpeed, float elapsedTime) { this->pos.x -= scrollSpeed; }
 

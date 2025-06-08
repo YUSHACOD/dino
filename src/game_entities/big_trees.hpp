@@ -57,6 +57,10 @@ class BigTree : public Obstacle {
     ~BigTree();
 
     static int getRandomState() { return GetRandomValue(0, BigTreeCount - 1); }
+    
+    ObstacleType getType() {
+        return ObstacleType::BigTree;
+    }
 
     void update(float scrollSpeed, float elapsedTime) {
         this->pos.x -= scrollSpeed;

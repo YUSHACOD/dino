@@ -35,7 +35,7 @@ class Ground {
         }
     }
 
-    void drawGroundScroll() {
+    void draw() {
         this->drawable.texture.Draw(
             raylib::Vector2(this->width_start, GroundHeight), 0.0, 1, WHITE);
 
