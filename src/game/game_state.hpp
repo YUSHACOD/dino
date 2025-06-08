@@ -21,6 +21,9 @@ const float ObstacleDefaultHeight = 620;
 const raylib::Vector2 HiScorePos(1350, 37);
 const raylib::Vector2 CurrScorePos(1640, 37);
 
+const int ScoreUpdateFrequency = 2;
+const int SpeedUpdateFrequency = 128;
+
 std::unique_ptr<Obstacle> getRandomObstacle(float width, float height) {
     const ObstacleType o = getRandomObstacleType();
     int idx = 0;
@@ -88,6 +91,130 @@ class GameState {
     // Updates
     // ------------------------------------------------------------
     void update() {}
+
+    void updateScoreSpeed() {
+        this->updateCount += 1;
+        
+        if ((this->updateCount % ScoreUpdateFrequency) == 0) {
+            this->currentScore += 1;
+        }
+        
+        if ((this->updateCount % SpeedUpdateFrequency) == 0) {
+            this->updateCount = 0;
+
+            if (reverse) {
+                this->ground.scrollSpeed -= 0.25;
+            } else {
+                this->ground.scrollSpeed += 0.25;
+            }
+            this->moon.update(this->reverse);
+        }
+        
+        if (this->hiScore > this->currentScore) {
+            this->hiScore = this->currentScore;
+        }
+    }
+
+    void updateCollision() {
+        Circle obstacleCircle;
+        switch (this->obstacle->getType()) {
+            case ObstacleType::Bird:
+                obstacleCircle = this->obstacle->getCircle(this->birdAsset);
+                break;
+
+            case ObstacleType::BigTree:
+                obstacleCircle = this->obstacle->getCircle(this->bigTreeAsset);
+                break;
+
+            case ObstacleType::SmallTree:
+                obstacleCircle =
+                    this->obstacle->getCircle(this->smallTreeAsset);
+                break;
+
+            default:
+                obstacleCircle = this->obstacle->getCircle(this->birdAsset);
+                break;
+        }
+
+        const Circle dinoCircle = this->dino.getCircle();
+
+        bool collision =
+            CheckCollisionCircles(dinoCircle.center, dinoCircle.radius,
+                                  obstacleCircle.center, obstacleCircle.radius);
+        
+        if (collision) {
+            this->dino.changeState(DinoState::Shocked);
+            this->gameEnded = true;
+        }
+    }
+
+    // fn updateObstacles(self : *DinoGameState) void {
+    //     switch (self.obstacle) {
+    //         Obstacles.Bird => {
+    //             self.obstacle_actor.Bird.updateAnimation(
+    //                 self.ground.scroll_speed);
+
+    //             const left_bound =
+    //                 self.obstacle_actor.Bird.pos.x < -self.bird_asset.width;
+    //             const right_bound =
+    //                 self.obstacle_actor.Bird.pos.x > self.screen_dimension.x;
+
+    //             const start_position =
+    //                 if (Direction == 1) self.screen_dimension.x else -
+    //                 self.bird_asset.width;
+
+    //             if (left_bound or right_bound) {
+    //                 self.obstacle = obstacle.getRandomObstacle();
+    //                 self.obstacle_actor = obstacle.getObstacleActor(
+    //                     self.obstacle, start_position, GroundPos, );
+    //             }
+    //         }
+    //         , Obstacles.BigTree => {
+    //             self.obstacle_actor.BigTree.updateAnimation(
+    //                 self.ground.scroll_speed);
+
+    //             const left_bound = self.obstacle_actor.BigTree.pos.x <
+    //                                -self.big_trees_asset.width(
+    //                                    self.obstacle_actor.BigTree.state);
+
+    //             const right_bound =
+    //                 self.obstacle_actor.BigTree.pos.x > self.screen_dimension.x;
+
+    //             const start_position =
+    //                 if (Direction == 1) self.screen_dimension.x else -
+    //                 self.big_trees_asset.width(
+    //                     self.obstacle_actor.BigTree.state);
+
+    //             if (left_bound or right_bound) {
+    //                 self.obstacle = obstacle.getRandomObstacle();
+    //                 self.obstacle_actor = obstacle.getObstacleActor(
+    //                     self.obstacle, start_position, GroundPos, );
+    //             }
+    //         }
+    //         , Obstacles.SmallTree => {
+    //             self.obstacle_actor.SmallTree.updateAnimation(
+    //                 self.ground.scroll_speed);
+
+    //             const left_bound = self.obstacle_actor.SmallTree.pos.x <
+    //                                -self.small_trees_asset.width;
+    //             const right_bound = self.obstacle_actor.SmallTree.pos.x >
+    //                                 self.screen_dimension.x;
+
+    //             const start_position =
+    //                 if (Direction == 1) self.screen_dimension.x else -
+    //                 self.small_trees_asset.width;
+
+    //             if (left_bound or right_bound) {
+    //                 self.obstacle = obstacle.getRandomObstacle();
+    //                 self.obstacle_actor = obstacle.getObstacleActor(
+    //                     self.obstacle, start_position, GroundPos, );
+    //             }
+    //         }
+    //         ,
+    //     }
+    // }
+    void updateObstacles() {
+    }
     // ------------------------------------------------------------
 
     // Draw

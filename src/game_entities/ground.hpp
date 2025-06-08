@@ -16,7 +16,7 @@ class Ground {
     float width;
     float height;
     float width_start = 0.0;
-    float scroll_speed;
+    float scrollSpeed;
     bool reverse;
     Drawable drawable;
 
@@ -26,7 +26,7 @@ class Ground {
     void draw(raylib::Vector2 pos) { this->drawable.draw(pos); }
 
     void updateGroundScroll() {
-        this->width_start -= this->scroll_speed;
+        this->width_start -= this->scrollSpeed;
 
         const float ground_width = this->width;
         if (this->width_start <= -ground_width or
@@ -56,9 +56,9 @@ Ground::Ground(bool reverse) : drawable(GroundResourcePath, "") {
     this->reverse = reverse;
 
     if (reverse) {
-        this->scroll_speed = -1 * ScrollSpeed;
+        this->scrollSpeed = -1 * ScrollSpeed;
     } else {
-        this->scroll_speed = ScrollSpeed;
+        this->scrollSpeed = ScrollSpeed;
     }
 }
 
