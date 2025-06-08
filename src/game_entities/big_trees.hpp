@@ -1,5 +1,5 @@
-#ifndef BIG_TREES
-#define BIG_TREES
+#ifndef BIG_TREES_DINO
+#define BIG_TREES_DINO
 
 #include <memory>
 #include <raylib-cpp.hpp>

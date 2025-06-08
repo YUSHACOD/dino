@@ -1,7 +1,7 @@
 #include <iostream>
 #include <raylib-cpp.hpp>
 
-#include "game_entities/nums.hpp"
+#include "game/game_state.hpp"
 
 int main() {
     // Initialization
@@ -15,7 +15,8 @@ int main() {
 
     // Test Ground
     //--------------------------------------------------------------------------------------
-    Nums nums_asset;
+    GameState game(false,
+                   raylib::Vector2((float)screenWidth, (float)screenHeight));
     //--------------------------------------------------------------------------------------
 
     // Frame Rate
@@ -35,7 +36,8 @@ int main() {
 
         ClearBackground(WHITE);
         textColor.DrawText("THE DINO WILL RISE!", 190, 200, 20);
-        nums_asset.drawScore(123456789, raylib::Vector2(190, 300));
+
+        game.draw();
         EndDrawing();
         //--------------------------------------------------------------------------------------
     }

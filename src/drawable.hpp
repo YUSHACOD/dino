@@ -3,14 +3,16 @@
 
 #include <raylib-cpp.hpp>
 
-class Asset{
-private:
-public:
+class Asset {
+  private:
+  public:
     virtual ~Asset();
-    virtual void draw(raylib::Vector2, int state){};
-    virtual float getWidth(int state) {};
-    virtual float getHeight(int state) {};
+    virtual void draw(raylib::Vector2, int state) {};
+    virtual float getWidth(int state) { return 0; };
+    virtual float getHeight(int state) { return 0; };
 };
+
+Asset::~Asset() = default;
 
 class Drawable {
   private:
@@ -23,8 +25,8 @@ class Drawable {
     raylib::Shader shader;
 
     Drawable(std::string texture_path, std::string shader_path);
-    
-    Drawable(const Drawable&) = delete;
+
+    Drawable(const Drawable &) = delete;
     ~Drawable();
 
     Vector2 get_dimensions() {

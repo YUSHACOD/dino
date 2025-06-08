@@ -24,7 +24,6 @@ class Cloud {
     float width;
 
     Cloud();
-
     ~Cloud();
     
     void draw(raylib::Vector2 pos) {

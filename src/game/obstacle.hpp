@@ -5,14 +5,11 @@
 #include <raylib-cpp.hpp>
 
 #include "../drawable.hpp"
-#include "../game_entities/big_trees.hpp"
-#include "../game_entities/bird.hpp"
-#include "../game_entities/small_trees.hpp"
 
 typedef struct Circle {
     raylib::Vector2 center;
     float radius;
-};
+} Circle;
 
 enum class ObstacleType { Bird, SmallTree, BigTree };
 
@@ -38,32 +35,13 @@ class Obstacle {
   private:
   public:
     virtual ~Obstacle();
-    virtual Circle getCircle(Asset &asset);
-    virtual void update(float scrollSpeed, float elapsedTime);
-    virtual void draw(Asset &asset);
+    virtual Circle getCircle(Asset &asset) {
+        return Circle{.center = raylib::Vector2(0, 0), .radius = 0};
+    };
+    virtual void update(float scrollSpeed, float elapsedTime) {};
+    virtual void draw(Asset &asset) {};
 };
 
-std::unique_ptr<Obstacle> getRandomObstacle(float width, float height) {
-    const ObstacleType o = getRandomObstacleType();
-
-    switch (o) {
-        case ObstacleType::Bird:
-            int idx = Bird::getRandomState();
-            return std::make_unique<Obstacle>(new Bird(width, idx));
-
-        case ObstacleType::BigTree:
-            int idx = BigTree::getRandomState();
-            return std::make_unique<Obstacle>(new BigTree(width, height, idx));
-
-        case ObstacleType::SmallTree:
-            int idx = SmallTree::getRandomState();
-            return std::make_unique<Obstacle>(
-                new SmallTree(width, height, idx));
-
-        default:
-            int idx = Bird::getRandomState();
-            return std::make_unique<Obstacle>(new Bird(width, idx));
-    }
-}
+Obstacle::~Obstacle() = default;
 
 #endif
