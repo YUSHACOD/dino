@@ -16,7 +16,7 @@ const std::string BigTreeResourcePaths[] = {
     "./resources/images/big_tree/big_tree_4.png",
     "./resources/images/big_tree/big_tree_5.png"};
 
-class BigTreeAsset {
+class BigTreeAsset : public Asset {
   private:
   public:
     std::vector<std::unique_ptr<Drawable>> drawables;
@@ -24,11 +24,11 @@ class BigTreeAsset {
     BigTreeAsset();
     ~BigTreeAsset();
 
-    float width(int state) {
+    float getWidth(int state) {
         return (float)this->drawables[state]->texture.width;
     }
 
-    float height(int state) {
+    float getHeight(int state) {
         return (float)this->drawables[state]->texture.height;
     }
 
@@ -48,19 +48,23 @@ BigTreeAsset::BigTreeAsset() {
 
 BigTreeAsset::~BigTreeAsset() {}
 
-class BigTree {
+class BigTree : public Obstacle {
   private:
   public:
     raylib::Vector2 pos;
     int state;
-    BigTree(float ground_height, float width, int state);
+    BigTree(float width, float height, int state);
     ~BigTree();
 
-    void update(float scroll_speed) { this->pos.x -= scroll_speed; }
+    static int getRandomState() { return GetRandomValue(0, BigTreeCount - 1); }
 
-    void draw(BigTreeAsset &asset) {
-        const float width = asset.width(this->state);
-        const float height = asset.height(this->state);
+    void update(float scrollSpeed, float elapsedTime) {
+        this->pos.x -= scrollSpeed;
+    }
+
+    void draw(Asset &asset) {
+        const float width = asset.getWidth(this->state);
+        const float height = asset.getHeight(this->state);
 
         const raylib::Vector2 adjustedPos =
             adjustPosWidth(this->pos, width, height);
@@ -68,9 +72,9 @@ class BigTree {
         asset.draw(adjustedPos, this->state);
     }
 
-    Circle getCircle(BigTreeAsset &asset) {
-        const float width = asset.width(this->state);
-        const float height = asset.height(this->state);
+    Circle getCircle(Asset &asset) {
+        const float width = asset.getWidth(this->state);
+        const float height = asset.getHeight(this->state);
 
         const raylib::Vector2 adjustedPos =
             adjustPosWidth(this->pos, width, height);
@@ -84,8 +88,7 @@ class BigTree {
     }
 };
 
-BigTree::BigTree(float ground_height, float width, int state)
-    : pos(width, ground_height) {
+BigTree::BigTree(float width, float height, int state) : pos(width, height) {
     this->state = state;
 }
 

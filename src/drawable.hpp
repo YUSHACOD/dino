@@ -3,6 +3,15 @@
 
 #include <raylib-cpp.hpp>
 
+class Asset{
+private:
+public:
+    virtual ~Asset();
+    virtual void draw(raylib::Vector2, int state){};
+    virtual float getWidth(int state) {};
+    virtual float getHeight(int state) {};
+};
+
 class Drawable {
   private:
     /* data */

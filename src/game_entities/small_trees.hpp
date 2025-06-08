@@ -17,7 +17,7 @@ const std::string SmallTreeResourcePaths[] = {
     "./resources/images/small_tree/small_tree_5.png",
     "./resources/images/small_tree/small_tree_6.png"};
 
-class SmallTreeAsset {
+class SmallTreeAsset : public Asset {
   private:
   public:
     std::vector<std::unique_ptr<Drawable>> drawables;
@@ -46,40 +46,46 @@ SmallTreeAsset::SmallTreeAsset() {
 
 SmallTreeAsset::~SmallTreeAsset() {}
 
-class SmallTree {
+class SmallTree: public Obstacle {
   private:
   public:
     raylib::Vector2 pos;
     int state;
 
-    SmallTree(float ground_height, float width, int state);
+    SmallTree(float width, float height, int state);
     ~SmallTree();
+    
+    static int getRandomState() {
+        return GetRandomValue(0, SmallTreeCount - 1);
+    }
 
-    void update(float scroll_speed) { this->pos.x -= scroll_speed; }
+    void update(float scrollSpeed, float elapsedTime) { this->pos.x -= scrollSpeed; }
 
-    void draw(SmallTreeAsset &asset) {
+    void draw(Asset &asset) {
         const raylib::Vector2 adjustedPos =
-            adjustPosWidth(this->pos, asset.width, asset.height);
+            adjustPosWidth(this->pos, asset.getWidth(this->state),
+                           asset.getHeight(this->state));
 
         asset.draw(adjustedPos, this->state);
     }
 
-    Circle getCircle(SmallTreeAsset &asset) {
+    Circle getCircle(Asset &asset) {
+        const float width = asset.getWidth(this->state);
+        const float height = asset.getHeight(this->state);
         const raylib::Vector2 adjustedPos =
-            adjustPosWidth(this->pos, asset.width, asset.height);
+            adjustPosWidth(this->pos, width, height);
 
         const raylib::Vector2 center =
-            adjustPosCircle(adjustedPos, asset.width, asset.height);
+            adjustPosCircle(adjustedPos, width, height);
 
-        const float radius =
-            (asset.width >= asset.height) ? (asset.height) : (asset.width);
+        const float radius = (width >= height) ? (height) : (width);
 
         return Circle{.center = center, .radius = radius};
     }
 };
 
-SmallTree::SmallTree(float ground_height, float width, int state)
-    : pos(width, ground_height) {
+SmallTree::SmallTree(float width, float height, int state)
+    : pos(width, height) {
     this->state = state;
 }
 

@@ -14,9 +14,11 @@ const std::string BirdResourcePaths[] = {
     "./resources/images/bird/b_wing_up.png"};
 
 const float BirdAnimationSpeed = 0.1;
+
+#define ObstaclePostionCount 3
 const float ObstaclePositions[] = {500, 525, 580};
 
-class BirdAsset {
+class BirdAsset : public Asset {
   private:
   public:
     std::vector<std::unique_ptr<Drawable>> drawables;
@@ -25,6 +27,10 @@ class BirdAsset {
 
     BirdAsset();
     ~BirdAsset();
+
+    float getWidth(int state) { return width; }
+
+    float getHeight(int state) { return height; }
 
     void draw(raylib::Vector2 pos, int state) {
         this->drawables[state]->draw(pos);
@@ -45,7 +51,7 @@ BirdAsset::BirdAsset() {
 
 BirdAsset::~BirdAsset() {}
 
-class Bird {
+class Bird : public Obstacle {
   private:
   public:
     raylib::Vector2 pos;
@@ -55,35 +61,40 @@ class Bird {
     Bird(float max_width, int obstacle_idx);
     ~Bird();
 
-    Circle getCircle(BirdAsset &asset) {
-        const raylib::Vector2 adjustedPos =
-            adjustPosHeight(this->pos, asset.height);
+    static int getRandomState() {
+        return GetRandomValue(0, ObstaclePostionCount - 1);
+    }
+
+    Circle getCircle(Asset &asset) {
+        const float width = asset.getWidth(this->state);
+        const float height = asset.getHeight(this->state);
+
+        const raylib::Vector2 adjustedPos = adjustPosHeight(this->pos, height);
 
         const raylib::Vector2 center =
-            adjustPosCircle(adjustedPos, asset.width, asset.height);
+            adjustPosCircle(adjustedPos, width, height);
 
-        const float radius =
-            (asset.width >= asset.height) ? (asset.height) : (asset.width);
+        const float radius = (width >= height) ? (height) : (width);
 
         return Circle{.center = center, .radius = radius};
     }
 
     void incrementState() { this->state = (this->state + 1) % BirdStateCount; }
 
-    void update(float scroll_speed, float frameTime) {
-        this->state_change_time += frameTime;
+    void update(float scrollSpeed, float elapsedTime) {
+        this->state_change_time += elapsedTime;
 
         if (this->state_change_time >= BirdAnimationSpeed) {
             this->incrementState();
             this->state_change_time = 0.0;
         }
 
-        this->pos.x -= scroll_speed;
+        this->pos.x -= scrollSpeed;
     }
 
-    void draw(BirdAsset &asset) {
+    void draw(Asset &asset) {
         const raylib::Vector2 adjustedPos =
-            adjustPosHeight(this->pos, asset.height);
+            adjustPosHeight(this->pos, asset.getHeight(this->state));
 
         asset.draw(this->pos, this->state);
     }
