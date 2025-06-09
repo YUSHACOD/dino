@@ -106,8 +106,6 @@ class Dino {
         const float diameter =
             (this->width >= this->height) ? (this->height) : (this->width);
         
-
-        DrawCircleV(center, diameter / 2, SKYBLUE);
         return Circle{.center = center, .radius = diameter / 2};
     }
 
@@ -191,8 +189,8 @@ class Dino {
         const raylib::Vector2 adjustedPos =
             adjustPosWidth(this->pos, this->width, this->height);
 
-        Circle c = this->getCircle();
-        DrawCircleV(c.center, c.radius, SKYBLUE);
+        // Circle c = this->getCircle();
+        // DrawCircleV(c.center, c.radius, SKYBLUE);
         this->draw(adjustedPos);
     }
 };

@@ -139,7 +139,7 @@ class GameState {
             this->moon.update(this->reverse);
         }
 
-        if (this->hiScore > this->currentScore) {
+        if (this->hiScore < this->currentScore) {
             this->hiScore = this->currentScore;
         }
     }

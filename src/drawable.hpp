@@ -16,7 +16,6 @@ Asset::~Asset() = default;
 
 class Drawable {
   private:
-    /* data */
   public:
     float rotation = 0;
     float scale = 1;

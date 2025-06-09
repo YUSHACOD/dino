@@ -81,8 +81,8 @@ class BigTree : public Obstacle {
         const raylib::Vector2 adjustedPos =
             adjustPosWidth(this->pos, width, height);
 
-        Circle c = this->getCircle(asset);
-        DrawCircleV(c.center, c.radius, SKYBLUE);
+        // Circle c = this->getCircle(asset);
+        // DrawCircleV(c.center, c.radius, SKYBLUE);
         asset.draw(adjustedPos, this->state);
     }
 

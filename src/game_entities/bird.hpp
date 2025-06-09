@@ -102,8 +102,8 @@ class Bird : public Obstacle {
         const raylib::Vector2 adjustedPos =
             adjustPosHeight(this->pos, asset.getHeight(this->state));
 
-        Circle c = this->getCircle(asset);
-        DrawCircleV(c.center, c.radius, SKYBLUE);
+        // Circle c = this->getCircle(asset);
+        // DrawCircleV(c.center, c.radius, SKYBLUE);
 
         asset.draw(adjustedPos, this->state);
     }

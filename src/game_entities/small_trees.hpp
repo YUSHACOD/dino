@@ -19,13 +19,21 @@ const std::string SmallTreeResourcePaths[] = {
 
 class SmallTreeAsset : public Asset {
   private:
-  public:
     std::vector<std::unique_ptr<Drawable>> drawables;
+  public:
     float width;
     float height;
 
     SmallTreeAsset();
     ~SmallTreeAsset();
+
+    float getWidth(int state) {
+        return this->width;
+    }
+    
+    float getHeight(int state) {
+        return this->height;
+    }
 
     void draw(raylib::Vector2 pos, int state) {
         this->drawables[state]->draw(pos);
@@ -78,8 +86,8 @@ class SmallTree: public Obstacle {
             adjustPosWidth(this->pos, asset.getWidth(this->state),
                            asset.getHeight(this->state));
 
-        Circle c = this->getCircle(asset);
-        DrawCircleV(c.center, c.radius, SKYBLUE);
+        // Circle c = this->getCircle(asset);
+        // DrawCircleV(c.center, c.radius, SKYBLUE);
         asset.draw(adjustedPos, this->state);
     }
 
