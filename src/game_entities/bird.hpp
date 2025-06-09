@@ -83,7 +83,9 @@ class Bird : public Obstacle {
         return Circle{.center = center, .radius = diameter / 2};
     }
 
-    void incrementState() { this->state = (this->state + 1) % BirdStateCount; }
+    void incrementState() {
+        this->state = mod((this->state + 1), BirdStateCount);
+    }
 
     ObstacleType getType() { return ObstacleType::Bird; }
 

@@ -19,9 +19,9 @@ const raylib::Vector2 MoonPos(1291, 103);
 
 class Moon {
   private:
-    void incrementState() { this->state = (this->state + 1) % MoonStates; }
+    void incrementState() { this->state = mod((this->state + 1), MoonStates); }
 
-    void decrementState() { this->state = (this->state - 1) % MoonStates; }
+    void decrementState() { this->state = mod((this->state - 1), MoonStates); }
 
   public:
     std::vector<std::unique_ptr<Drawable>> drawables;

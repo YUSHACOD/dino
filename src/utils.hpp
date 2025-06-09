@@ -40,6 +40,11 @@ void updateWithMousePos(raylib::Vector2 &pos) {
     }
 }
 
+int mod(int a, int b) {
+    int result = a % b;
+    return (result < 0) ? (result + b) : (result);
+}
+
 // Physics helpers
 //----------------------------------------------------------------------------------
 raylib::Vector2 newVelocity(raylib::Vector2 current_vel, raylib::Vector2 accl,

@@ -15,7 +15,7 @@ int main() {
 
     // Test Ground
     //--------------------------------------------------------------------------------------
-    GameState game(false,
+    GameState game(true,
                    raylib::Vector2((float)screenWidth, (float)screenHeight));
     //--------------------------------------------------------------------------------------
 

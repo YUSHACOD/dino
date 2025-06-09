@@ -124,11 +124,11 @@ class GameState {
     void updateScoreSpeed() {
         this->updateCount += 1;
 
-        if ((this->updateCount % ScoreUpdateFrequency) == 0) {
+        if (mod(this->updateCount, ScoreUpdateFrequency) == 0) {
             this->currentScore += 1;
         }
 
-        if ((this->updateCount % SpeedUpdateFrequency) == 0) {
+        if (mod(this->updateCount, SpeedUpdateFrequency) == 0) {
             this->updateCount = 0;
 
             if (reverse) {
