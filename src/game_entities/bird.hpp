@@ -28,9 +28,9 @@ class BirdAsset : public Asset {
     BirdAsset();
     ~BirdAsset();
 
-    float getWidth(int state) { return width; }
+    float getWidth(int state) { return this->width; }
 
-    float getHeight(int state) { return height; }
+    float getHeight(int state) { return this->height; }
 
     void draw(raylib::Vector2 pos, int state) {
         this->drawables[state]->draw(pos);
@@ -65,6 +65,10 @@ class Bird : public Obstacle {
         return GetRandomValue(0, ObstaclePostionCount - 1);
     }
 
+    raylib::Vector2 getPos() { return this->pos; }
+
+    int getState() { return this->state; }
+
     Circle getCircle(Asset &asset) {
         const float width = asset.getWidth(this->state);
         const float height = asset.getHeight(this->state);
@@ -74,16 +78,14 @@ class Bird : public Obstacle {
         const raylib::Vector2 center =
             adjustPosCircle(adjustedPos, width, height);
 
-        const float radius = (width >= height) ? (height) : (width);
+        const float diameter = (width >= height) ? (height) : (width);
 
-        return Circle{.center = center, .radius = radius};
+        return Circle{.center = center, .radius = diameter / 2};
     }
 
     void incrementState() { this->state = (this->state + 1) % BirdStateCount; }
-    
-    ObstacleType getType() {
-        return ObstacleType::Bird;
-    }
+
+    ObstacleType getType() { return ObstacleType::Bird; }
 
     void update(float scrollSpeed, float elapsedTime) {
         this->state_change_time += elapsedTime;
@@ -100,7 +102,10 @@ class Bird : public Obstacle {
         const raylib::Vector2 adjustedPos =
             adjustPosHeight(this->pos, asset.getHeight(this->state));
 
-        asset.draw(this->pos, this->state);
+        Circle c = this->getCircle(asset);
+        DrawCircleV(c.center, c.radius, SKYBLUE);
+
+        asset.draw(adjustedPos, this->state);
     }
 };
 

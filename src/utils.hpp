@@ -7,27 +7,27 @@
 
 raylib::Vector2 adjustPosMiddle(raylib::Vector2 pos, float width,
                                 float height) {
-    width = pos.x - width / 2;
-    height = pos.y - height / 2;
-    return raylib::Vector2(width, height);
+    const float x = pos.x - (width / 2);
+    const float y = pos.y - (height / 2);
+    return raylib::Vector2(x, y);
 }
 
 raylib::Vector2 adjustPosWidth(raylib::Vector2 pos, float width, float height) {
-    width = pos.x - width / 2;
-    height = pos.y - height;
-    return raylib::Vector2(width, height);
+    const float x = pos.x - (width / 2);
+    const float y = pos.y - height;
+    return raylib::Vector2(x, y);
 }
 
 raylib::Vector2 adjustPosHeight(raylib::Vector2 pos, float height) {
-    height = pos.y - height / 2;
-    return raylib::Vector2(pos.x, height);
+    const float y = pos.y - (height / 2);
+    return raylib::Vector2(pos.x, y);
 }
 
 raylib::Vector2 adjustPosCircle(raylib::Vector2 pos, float width,
                                 float height) {
-    width = pos.x + width / 2;
-    height = pos.y + height / 2;
-    return raylib::Vector2(width, height);
+    const float x = pos.x + (width / 2);
+    const float y = pos.y + (height / 2);
+    return raylib::Vector2(x, y);
 }
 
 void updateWithMousePos(raylib::Vector2 &pos) {
@@ -54,10 +54,8 @@ raylib::Vector2 displacement(raylib::Vector2 current_vel, raylib::Vector2 accl,
                              float time_elapsed) {
     const float time_elapsed_2 = time_elapsed * time_elapsed;
 
-    float x = (current_vel.x + accl.x * time_elapsed) +
-              (0.5 * accl.x * time_elapsed_2);
-    float y = (current_vel.y + accl.y * time_elapsed) +
-              (0.5 * accl.y * time_elapsed_2);
+    float x = (current_vel.x * time_elapsed) + (0.5 * accl.x * time_elapsed_2);
+    float y = (current_vel.y * time_elapsed) + (0.5 * accl.y * time_elapsed_2);
 
     return raylib::Vector2(x, y);
 }

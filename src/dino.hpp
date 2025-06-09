@@ -103,10 +103,12 @@ class Dino {
         const raylib::Vector2 center =
             adjustPosCircle(adjustedPos, this->width, this->height);
 
-        const float radius =
+        const float diameter =
             (this->width >= this->height) ? (this->height) : (this->width);
+        
 
-        return Circle{.center = center, .radius = radius};
+        DrawCircleV(center, diameter / 2, SKYBLUE);
+        return Circle{.center = center, .radius = diameter / 2};
     }
 
     void update(float timeElapsed) {
@@ -126,10 +128,11 @@ class Dino {
             // Position Update
             // -------------------------------------------
             // Gravity
-            const raylib::Vector2 displace = displacement(this->velocity, Gravity, timeElapsed);
-            
+            const raylib::Vector2 displace =
+                displacement(this->velocity, Gravity, timeElapsed);
+
             // New Velocity
-            this->velocity = newVelocity(this->velocity, Gravity,  timeElapsed);
+            this->velocity = newVelocity(this->velocity, Gravity, timeElapsed);
             this->pos = this->pos.Add(displace);
             // -------------------------------------------
 
@@ -140,8 +143,9 @@ class Dino {
                 this->velocity.x = 0;
                 this->velocity.y = 0;
                 this->isJumping = false;
-                
-                if ((this->state != DinoState::Running) && (this->state != DinoState::Crawling)) {
+
+                if ((this->state != DinoState::Running) &&
+                    (this->state != DinoState::Crawling)) {
                     this->changeState(DinoState::Running);
                 }
             }
@@ -149,12 +153,14 @@ class Dino {
 
             // Jump
             // -------------------------------------------
-            if ((raylib::Keyboard::IsKeyPressed(KeyboardKey::KEY_SPACE)) && !this->isJumping) {
+            if ((raylib::Keyboard::IsKeyPressed(KeyboardKey::KEY_SPACE)) &&
+                !this->isJumping) {
                 this->isJumping = true;
                 this->velocity = JumpVelocity;
             }
-            
-            if ((this->pos.y != DinoPos.y) && (this->state != DinoState::Idle)) {
+
+            if ((this->pos.y != DinoPos.y) &&
+                (this->state != DinoState::Idle)) {
                 this->changeState(DinoState::Idle);
             }
             // -------------------------------------------
@@ -162,13 +168,14 @@ class Dino {
             // Crawling
             // -------------------------------------------
             if (!this->isJumping) {
-                if (raylib::Keyboard::IsKeyDown(KeyboardKey::KEY_DOWN)){
+                if (raylib::Keyboard::IsKeyDown(KeyboardKey::KEY_DOWN)) {
                     if (this->state != DinoState::Crawling) {
                         this->changeState(DinoState::Crawling);
                     }
                 }
-                
-                if (raylib::Keyboard::IsKeyReleased(KeyboardKey::KEY_DOWN) && (this->state == DinoState::Crawling)) {
+
+                if (raylib::Keyboard::IsKeyReleased(KeyboardKey::KEY_DOWN) &&
+                    (this->state == DinoState::Crawling)) {
                     this->changeState(DinoState::Running);
                 }
             }
@@ -184,6 +191,8 @@ class Dino {
         const raylib::Vector2 adjustedPos =
             adjustPosWidth(this->pos, this->width, this->height);
 
+        Circle c = this->getCircle();
+        DrawCircleV(c.center, c.radius, SKYBLUE);
         this->draw(adjustedPos);
     }
 };

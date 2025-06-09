@@ -38,6 +38,8 @@ class Obstacle {
     virtual Circle getCircle(Asset &asset) {
         return Circle{.center = raylib::Vector2(0, 0), .radius = 0};
     };
+    virtual int getState() { return 0; };
+    virtual raylib::Vector2 getPos() { return raylib::Vector2(0, 0); };
     virtual ObstacleType getType() { return ObstacleType::Bird; };
     virtual void update(float scrollSpeed, float elapsedTime) {};
     virtual void draw(Asset &asset) {};

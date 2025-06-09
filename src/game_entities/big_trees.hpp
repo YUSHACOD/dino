@@ -61,6 +61,14 @@ class BigTree : public Obstacle {
     ObstacleType getType() {
         return ObstacleType::BigTree;
     }
+    
+    int getState() {
+        return this->state;
+    }
+    
+    raylib::Vector2 getPos() {
+        return this->pos;
+    }
 
     void update(float scrollSpeed, float elapsedTime) {
         this->pos.x -= scrollSpeed;
@@ -73,6 +81,8 @@ class BigTree : public Obstacle {
         const raylib::Vector2 adjustedPos =
             adjustPosWidth(this->pos, width, height);
 
+        Circle c = this->getCircle(asset);
+        DrawCircleV(c.center, c.radius, SKYBLUE);
         asset.draw(adjustedPos, this->state);
     }
 
@@ -86,9 +96,9 @@ class BigTree : public Obstacle {
         const raylib::Vector2 center =
             adjustPosCircle(adjustedPos, width, height);
 
-        const float radius = (width >= height) ? (height) : (width);
+        const float diameter = (width >= height) ? (height) : (width);
 
-        return Circle{.center = center, .radius = radius};
+        return Circle{.center = center, .radius = diameter / 2};
     }
 };
 

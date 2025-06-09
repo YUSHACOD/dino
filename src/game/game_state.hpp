@@ -88,17 +88,46 @@ class GameState {
     GameState(bool reverse, raylib::Vector2 screenDimensions);
     ~GameState();
 
-    // Updates
-    // ------------------------------------------------------------
-    void update() {}
+    void update(float elapsedTime) {
+        if (!this->gameStarted) {
+            if (raylib::Keyboard::IsKeyPressed(KeyboardKey::KEY_SPACE)) {
+                this->gameStarted = true;
+                this->dino.changeState(DinoState::Running);
+            }
+        }
+
+        if (this->gameEnded) {
+            if (raylib::Keyboard::IsKeyPressed(KeyboardKey::KEY_R)) {
+                this->gameEnded = false;
+                this->dino.changeState(DinoState::Running);
+
+                this->obstacle = getRandomObstacle(this->screenDimensions.x,
+                                                   ObstacleDefaultHeight);
+
+                this->currentScore = 0;
+                this->ground.scrollSpeed =
+                    (this->reverse) ? (-1 * ScrollSpeed) : (ScrollSpeed);
+            }
+        }
+
+        if (this->gameStarted && !this->gameEnded) {
+            this->updateScoreSpeed();
+
+            this->dino.update(elapsedTime);
+
+            this->ground.updateGroundScroll();
+            this->updateObstacles(elapsedTime);
+            this->updateCollision();
+        }
+    }
 
     void updateScoreSpeed() {
         this->updateCount += 1;
-        
+
         if ((this->updateCount % ScoreUpdateFrequency) == 0) {
             this->currentScore += 1;
         }
-        
+
         if ((this->updateCount % SpeedUpdateFrequency) == 0) {
             this->updateCount = 0;
 
@@ -109,7 +138,7 @@ class GameState {
             }
             this->moon.update(this->reverse);
         }
-        
+
         if (this->hiScore > this->currentScore) {
             this->hiScore = this->currentScore;
         }
@@ -141,79 +170,50 @@ class GameState {
         bool collision =
             CheckCollisionCircles(dinoCircle.center, dinoCircle.radius,
                                   obstacleCircle.center, obstacleCircle.radius);
-        
+
         if (collision) {
             this->dino.changeState(DinoState::Shocked);
             this->gameEnded = true;
         }
     }
 
-    // fn updateObstacles(self : *DinoGameState) void {
-    //     switch (self.obstacle) {
-    //         Obstacles.Bird => {
-    //             self.obstacle_actor.Bird.updateAnimation(
-    //                 self.ground.scroll_speed);
+    void updateObstacles(float elapsedTime) {
+        this->obstacle->update(this->ground.scrollSpeed, elapsedTime);
+        float assetWidth = 0;
+        float obstaclePosX = this->obstacle->getPos().x;
 
-    //             const left_bound =
-    //                 self.obstacle_actor.Bird.pos.x < -self.bird_asset.width;
-    //             const right_bound =
-    //                 self.obstacle_actor.Bird.pos.x > self.screen_dimension.x;
+        switch (this->obstacle->getType()) {
+            case ObstacleType::Bird:
+                assetWidth =
+                    this->birdAsset.getWidth(this->obstacle->getState());
+                break;
 
-    //             const start_position =
-    //                 if (Direction == 1) self.screen_dimension.x else -
-    //                 self.bird_asset.width;
+            case ObstacleType::BigTree:
+                assetWidth =
+                    this->bigTreeAsset.getWidth(this->obstacle->getState());
+                break;
 
-    //             if (left_bound or right_bound) {
-    //                 self.obstacle = obstacle.getRandomObstacle();
-    //                 self.obstacle_actor = obstacle.getObstacleActor(
-    //                     self.obstacle, start_position, GroundPos, );
-    //             }
-    //         }
-    //         , Obstacles.BigTree => {
-    //             self.obstacle_actor.BigTree.updateAnimation(
-    //                 self.ground.scroll_speed);
+            case ObstacleType::SmallTree:
+                assetWidth =
+                    this->smallTreeAsset.getWidth(this->obstacle->getState());
+                break;
 
-    //             const left_bound = self.obstacle_actor.BigTree.pos.x <
-    //                                -self.big_trees_asset.width(
-    //                                    self.obstacle_actor.BigTree.state);
+            default:
+                assetWidth =
+                    this->birdAsset.getWidth(this->obstacle->getState());
+                break;
+        }
 
-    //             const right_bound =
-    //                 self.obstacle_actor.BigTree.pos.x > self.screen_dimension.x;
+        const bool leftBound = obstaclePosX < (-1 * assetWidth);
+        const bool rightBound = obstaclePosX > this->screenDimensions.x;
 
-    //             const start_position =
-    //                 if (Direction == 1) self.screen_dimension.x else -
-    //                 self.big_trees_asset.width(
-    //                     self.obstacle_actor.BigTree.state);
+        const float startPosition =
+            (reverse) ? (-1 * assetWidth) : (this->screenDimensions.x);
 
-    //             if (left_bound or right_bound) {
-    //                 self.obstacle = obstacle.getRandomObstacle();
-    //                 self.obstacle_actor = obstacle.getObstacleActor(
-    //                     self.obstacle, start_position, GroundPos, );
-    //             }
-    //         }
-    //         , Obstacles.SmallTree => {
-    //             self.obstacle_actor.SmallTree.updateAnimation(
-    //                 self.ground.scroll_speed);
-
-    //             const left_bound = self.obstacle_actor.SmallTree.pos.x <
-    //                                -self.small_trees_asset.width;
-    //             const right_bound = self.obstacle_actor.SmallTree.pos.x >
-    //                                 self.screen_dimension.x;
-
-    //             const start_position =
-    //                 if (Direction == 1) self.screen_dimension.x else -
-    //                 self.small_trees_asset.width;
-
-    //             if (left_bound or right_bound) {
-    //                 self.obstacle = obstacle.getRandomObstacle();
-    //                 self.obstacle_actor = obstacle.getObstacleActor(
-    //                     self.obstacle, start_position, GroundPos, );
-    //             }
-    //         }
-    //         ,
-    //     }
-    // }
-    void updateObstacles() {
+        if (leftBound || rightBound) {
+            this->obstacle =
+                getRandomObstacle(startPosition, ObstacleDefaultHeight);
+        }
     }
     // ------------------------------------------------------------
 

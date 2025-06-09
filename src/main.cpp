@@ -28,6 +28,7 @@ int main() {
     while (!w.ShouldClose()) {
         // Update
         //--------------------------------------------------------------------------------------
+        game.update(w.GetFrameTime());
         //--------------------------------------------------------------------------------------
 
         // Draw
@@ -35,7 +36,7 @@ int main() {
         BeginDrawing();
 
         ClearBackground(WHITE);
-        textColor.DrawText("THE DINO WILL RISE!", 190, 200, 20);
+        // textColor.DrawText("THE DINO WILL RISE!", 190, 200, 20);
 
         game.draw();
         EndDrawing();

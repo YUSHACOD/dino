@@ -58,6 +58,14 @@ class SmallTree: public Obstacle {
     static int getRandomState() {
         return GetRandomValue(0, SmallTreeCount - 1);
     }
+
+    int getState() {
+        return this->state;
+    }
+    
+    raylib::Vector2 getPos() {
+        return this->pos;
+    }
     
     ObstacleType getType() {
         return ObstacleType::SmallTree;
@@ -70,6 +78,8 @@ class SmallTree: public Obstacle {
             adjustPosWidth(this->pos, asset.getWidth(this->state),
                            asset.getHeight(this->state));
 
+        Circle c = this->getCircle(asset);
+        DrawCircleV(c.center, c.radius, SKYBLUE);
         asset.draw(adjustedPos, this->state);
     }
 
@@ -82,9 +92,9 @@ class SmallTree: public Obstacle {
         const raylib::Vector2 center =
             adjustPosCircle(adjustedPos, width, height);
 
-        const float radius = (width >= height) ? (height) : (width);
+        const float diameter = (width >= height) ? (height) : (width);
 
-        return Circle{.center = center, .radius = radius};
+        return Circle{.center = center, .radius = diameter / 2};
     }
 };
 
